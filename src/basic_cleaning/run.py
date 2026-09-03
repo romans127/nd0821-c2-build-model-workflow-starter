@@ -5,6 +5,7 @@ result as a new artifact.
 
 Cleaning steps:
 - drop listings with price outside [min_price, max_price]
+- drop listings outside the NYC bounding box
 - convert last_review to datetime
 - drop rows missing last_review, reviews_per_month, neighbourhood_group or
   room_type
@@ -39,6 +40,10 @@ def go(args):
         f"Dropped {(~idx).sum()} rows with price outside "
         f"[{args.min_price}, {args.max_price}]"
     )
+
+    idx = df['longitude'].between(-74.25, -73.50) & df['latitude'].between(40.5, 41.2)
+    df = df[idx].copy()
+    logger.info(f"Dropped {(~idx).sum()} rows outside NYC boundaries")
 
     # Convert last_review to datetime
     df["last_review"] = pd.to_datetime(df["last_review"])

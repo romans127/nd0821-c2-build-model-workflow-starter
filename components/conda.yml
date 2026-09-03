@@ -4,3 +4,5 @@ channels:
   - defaults
 dependencies:
   - mlflow=1.14.1
+  - protobuf<4
+  - numpy<1.24
